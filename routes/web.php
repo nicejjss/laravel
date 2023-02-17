@@ -158,8 +158,6 @@ Route::controller(TestController::class)->group(function () {
     Route::get('/home/index', 'index');
     Route::get('/home/index2', 'index2');
 });
-
-
 // Resource Controller
 use  \App\Http\Controllers\ResourceController;
 //Register Many Resource Controllers
@@ -171,4 +169,17 @@ use  \App\Http\Controllers\ResourceController;
 //Register 1 Resource Controller
 Route::resource('resource',ResourceController::class);
 
+Route::get("/admin/{name?}/{id?}",function ($name,$id){
+    return view('admin.view',compact('name','id'));
+});
+
+use Illuminate\Support\Facades\DB;
+Route::get("/getusers",function (){
+   $arr = DB::select("select * from user ");
+//   print_r($arr);
+   foreach ($arr as $rows){
+       echo "<br>".print_r($rows)."<br>";
+   }
+   return "<br> This is user: ";
+});
 
