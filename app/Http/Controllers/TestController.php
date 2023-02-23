@@ -14,7 +14,7 @@ class TestController extends Controller
         $this->middleware('role')->except('index');
     }
 
-    public function show($name ="jack",$id)
+    public function show($name ="jack",$id =0)
     {
         echo "<br> Name: ".$name;
         echo "<br> ID: ".$id;

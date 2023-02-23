@@ -131,7 +131,7 @@ Route::middleware(['using'])->group(function () {
 Route::get("/",function (Request $request){
     echo $request;
     return view("welcome");
-});
+})->middleware('using');
 
 
 Route::get("/role/{role?}",function ($role1){
@@ -154,9 +154,12 @@ Route::get("/user123",[UserController::class,"index"])->middleware("role:guess")
 
 //Using Group Route
 Route::controller(TestController::class)->group(function () {
-    Route::get('/home/show', 'show');
+    Route::get('/home/show/{name?}/{id?}', 'show');
     Route::get('/home/index', 'index');
     Route::get('/home/index2', 'index2');
+});
+Route::middleware('')->group(function (){
+
 });
 // Resource Controller
 use  \App\Http\Controllers\ResourceController;
@@ -169,11 +172,15 @@ use  \App\Http\Controllers\ResourceController;
 //Register 1 Resource Controller
 Route::resource('resource',ResourceController::class);
 
-Route::get("/admin/{name?}/{id?}",function ($name,$id){
-    return view('admin.view',compact('name','id'));
+
+//Nested View
+Route::get("/admin",function (){
+    return view('admin.view');
 });
 
 use Illuminate\Support\Facades\DB;
+
+
 Route::get("/getusers",function (){
    $arr = DB::select("select * from user ");
 //   print_r($arr);
@@ -183,3 +190,45 @@ Route::get("/getusers",function (){
    return "<br> This is user: ";
 });
 
+use App\Models\Flights;
+
+Route::get('/flights',function (){
+    $flights = Flights::all();
+    foreach ($flights as $flight){
+        echo "<br>".$flight->name;
+    }
+});
+Route::get('/find/{id?}',function($id =0){
+    echo "Flight: ".$id;
+    $flight=Flights::where('flight_id',$id)->first();
+    echo $flight;
+});
+Route::get('take',function (){
+    $flights  = Flights::where("name",'Miss Bethany Strosin MD')
+        ->get();
+    foreach ($flights as $flight){
+        echo "<br>".$flight->name;
+    }
+});
+Route::get("/make",function (){
+   $flights=    Flights::factory()
+       ->count(2)
+       ->make();
+    foreach ($flights as $flight){
+        echo "<br>".$flight->name;
+    }
+});
+
+Route::get("/checkage/{id?}",function ($id=100){
+    return "he is :".$id;
+});
+
+Route::get('/insert',function(){
+    $flight=new Flights();
+    $flight->name='Nishka';
+    $flight->flight_up=date("Y-m-d");
+    $flight->save();
+});
+Route::get('/create',function(){
+    Flights::create(['name'=>'Harshita','flight_up'=>date("Y-m-d")]);
+});

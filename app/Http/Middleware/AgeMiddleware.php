@@ -16,7 +16,18 @@ class AgeMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        echo "This Is Age MiddleWare <br>";
-        return $next($request);
+        if($request->get('') >18){
+            return $next($request);
+        }
+
+            echo "not 18";
+            return response()->view('admin.view');
+
+
+    }
+
+    public function terminate($request, $response)
+    {
+        // Store the session data...
     }
 }

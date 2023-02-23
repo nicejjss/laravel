@@ -9,7 +9,10 @@
 </head>
 <body>
     <h1>VIEW DETAIL</h1>
-<h1>Name: {{$name}}</h1>
-<h2>ID: {{$id}}</h2>
+    <form action="/checkage" method="post">
+        @csrf
+        <input type="number" name="age" id="">
+        <input type="submit" value="click to age">
+    </form>
 </body>
 </html>
